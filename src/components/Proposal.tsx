@@ -100,7 +100,7 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
       
       // Call the smart contract to vote
       const result = await wallet.signAndSendTransaction({
-        receiverId: "govai.near", // Replace with actual governance contract ID
+        receiverId: process.env.VOTING_CONTRACT || "vote.govai.near",
         actions: [
           {
             type: "FunctionCall",
