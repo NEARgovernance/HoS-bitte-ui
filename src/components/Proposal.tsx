@@ -54,7 +54,7 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
   const { selector, activeAccountId } = useBitteWallet();
   const [votingOption, setVotingOption] = useState<number | null>(null);
   const [isVoting, setIsVoting] = useState(false);
-  const [votingAmount, setVotingAmount] = useState<string>("");
+  const [venearBalance, setVenearBalance] = useState<string>("");
 
   const formatTimestamp = (timestampNs: string) => {
     const timestamp = parseInt(timestampNs) / 1000000; // Convert nanoseconds to milliseconds
@@ -86,19 +86,51 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
   };
 
   const handleVote = async () => {
-    if (!votingOption || !votingAmount || !activeAccountId) {
-      alert("Please select a voting option and enter voting amount");
+    if (!votingOption || !activeAccountId) {
+      alert("Please select a voting option");
       return;
     }
+
 
     setIsVoting(true);
     try {
       const wallet = await selector.wallet();
       
-      // Convert NEAR to yoctoNEAR
-      const amountInYocto = (parseFloat(votingAmount) * Math.pow(10, 24)).toString();
+      // Get proof from vNEAR contract
+      const VENEAR_CONTRACT_ID = process.env.VENEAR_CONTRACT_ID || "stake.govai.near";
+      const proofPayload = {
+        jsonrpc: "2.0",
+        id: "1",
+        method: "query",
+        params: {
+          request_type: "call_function",
+          finality: "final",
+          account_id: VENEAR_CONTRACT_ID,
+          method_name: "get_proof",
+          args_base64: Buffer.from(JSON.stringify({ 
+            account_id: activeAccountId,
+          })).toString("base64"),
+        },
+      };
+
+      const proofResponse = await fetch("https://rpc.mainnet.near.org", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(proofPayload),
+      });
+
+      const proofResult = await proofResponse.json();
       
-      // Call the smart contract to vote
+      if (!proofResult.result || !proofResult.result.result) {
+        throw new Error("Failed to get proof data");
+      }
+
+      // Parse the proof data
+      const proofData = JSON.parse(Buffer.from(proofResult.result.result, 'base64').toString());
+      
+      // Call the smart contract to vote with proof
       const result = await wallet.signAndSendTransaction({
         receiverId: process.env.VOTING_CONTRACT || "vote.govai.near",
         actions: [
@@ -109,7 +141,8 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
               args: {
                 proposal_id: proposal.id,
                 vote_option: votingOption,
-                amount: amountInYocto
+                merkleProof: proofData[0],
+                vAccount: proofData[1]
               },
               gas: "300000000000000",
               deposit: "0"
@@ -117,13 +150,11 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
           }
         ]
       });
-
       console.log("Vote transaction result:", result);
       alert("Vote submitted successfully!");
       
       // Reset form
       setVotingOption(null);
-      setVotingAmount("");
       
     } catch (error) {
       console.error("Error voting:", error);
@@ -238,26 +269,12 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
                 </div>
               </div>
 
-              {/* Voting Amount */}
-              <div>
-                <label className="block text-sm font-medium mb-2">Voting Amount (NEAR):</label>
-                <input
-                  type="number"
-                  value={votingAmount}
-                  onChange={(e) => setVotingAmount(e.target.value)}
-                  placeholder="Enter amount in NEAR"
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
-                  min="0"
-                  step="0.1"
-                />
-              </div>
-
               {/* Submit Vote Button */}
               <button
                 onClick={handleVote}
-                disabled={!votingOption || !votingAmount || isVoting}
+                disabled={!votingOption || isVoting}
                 className={`w-full px-4 py-2 rounded-lg font-medium transition-colors ${
-                  votingOption !== null && votingAmount && !isVoting
+                  votingOption !== null && !isVoting
                     ? 'bg-green-600 hover:bg-green-700 text-white'
                     : 'bg-gray-600 text-gray-400 cursor-not-allowed'
                 }`}
