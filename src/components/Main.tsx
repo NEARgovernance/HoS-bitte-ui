@@ -28,11 +28,13 @@ const Main: React.FC = () => {
   const customToolComponents = [
     {
       name: 'getProposal', // This should match the operationId or route name from your OpenAPI spec
-      component: (props: { data: any }) => (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      component: (props: any) => (
         <Proposal data={props.data} />
       ),
     },
-  ];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ] as any;
   return (
     <main className="flex flex-col items-center gap-8 max-w-5xl mx-auto my-4 md:my-8">
       <div className="h-[calc(100vh-114px)] lg:h-[calc(100vh-180px)] w-full">
