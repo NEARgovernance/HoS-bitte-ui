@@ -43,7 +43,7 @@ const Main: React.FC = () => {
             agentImage: bitteAgent.image,
             agentName: bitteAgent.name,
           }}
-          agentId={'hos-agent.vercel.app'}
+          agentId={'hos-bitte-agent-testnet.vercel.app'}
           wallet={{ 
             near: { 
               wallet,
