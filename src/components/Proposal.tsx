@@ -97,7 +97,7 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
       const wallet = await selector.wallet();
       
       // Get proof from vNEAR contract
-      const VENEAR_CONTRACT_ID = process.env.VENEAR_CONTRACT_ID || "stake.govai.near";
+      const VENEAR_CONTRACT_ID = process.env.VENEAR_CONTRACT_ID || "v.hos03.testnet";
       const proofPayload = {
         jsonrpc: "2.0",
         id: "1",
@@ -132,7 +132,7 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
       
       // Call the smart contract to vote with proof
       const result = await wallet.signAndSendTransaction({
-        receiverId: process.env.VOTING_CONTRACT || "vote.govai.near",
+        receiverId: process.env.VOTING_CONTRACT || "vote.hos03.testnet",
         actions: [
           {
             type: "FunctionCall",
