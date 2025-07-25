@@ -92,7 +92,7 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
   };
 
   const handleVote = async () => {
-    console.log('a')
+    
     if (votingOption === null || !activeAccountId) {
       alert("Please select a voting option or check connect wallet");
       return;
