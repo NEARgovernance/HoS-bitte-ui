@@ -54,8 +54,7 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
   const { selector, activeAccountId } = useBitteWallet();
   const [votingOption, setVotingOption] = useState<number | null>(null);
   const [isVoting, setIsVoting] = useState(false);
-  const [venearBalance, setVenearBalance] = useState<string>("");
-
+   
   const formatTimestamp = (timestampNs: string) => {
     const timestamp = parseInt(timestampNs) / 1000000; // Convert nanoseconds to milliseconds
     return new Date(timestamp).toLocaleString();
@@ -113,7 +112,7 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
         },
       };
 
-      const proofResponse = await fetch("https://rpc.mainnet.near.org", {
+      const proofResponse = await fetch("https://rpc.testnet.fastnear.com", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -164,7 +163,7 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
     }
   };
 
-  const isVotingActive = proposal.status === "Voting";
+  const isVotingActive = proposal?.status === "Voting";
 
   return (
     <div className="p-6 border border-gray-700 rounded-lg bg-gray-900 text-white">
