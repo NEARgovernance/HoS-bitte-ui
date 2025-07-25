@@ -139,8 +139,8 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
             params: {
               methodName: "vote",
               args: {
-                proposal_id: proposal.id,
-                vote_option: votingOption,
+                proposal_id: proposal.id.toString(),
+                vote: votingOption.toString(),
                 merkleProof: proofData[0],
                 vAccount: proofData[1]
               },
