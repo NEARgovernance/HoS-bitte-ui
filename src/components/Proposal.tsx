@@ -86,12 +86,13 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
 
   const handleVote = async () => {
     if (!votingOption || !activeAccountId) {
-      alert("Please select a voting option");
+      alert("Please select a voting option or check connect wallet");
       return;
     }
 
 
     setIsVoting(true);
+    console.log("Voting option:", votingOption);
     try {
       const wallet = await selector.wallet();
       
@@ -131,7 +132,7 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
       
       // Call the smart contract to vote with proof
       const result = await wallet.signAndSendTransaction({
-        receiverId: process.env.VOTING_CONTRACT || "vote.hos03.testnet",
+        receiverId: process.env.VOTING_CONTRACT || "example.ballotbox.testnet",
         actions: [
           {
             type: "FunctionCall",
