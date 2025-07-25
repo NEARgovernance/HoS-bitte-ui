@@ -85,7 +85,8 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
   };
 
   const handleVote = async () => {
-    if (!votingOption || !activeAccountId) {
+    console.log('a')
+    if (votingOption === null || !activeAccountId) {
       alert("Please select a voting option or check connect wallet");
       return;
     }
@@ -272,7 +273,7 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
               {/* Submit Vote Button */}
               <button
                 onClick={handleVote}
-                disabled={!votingOption || isVoting}
+                disabled={votingOption === null || isVoting}
                 className={`w-full px-4 py-2 rounded-lg font-medium transition-colors ${
                   votingOption !== null && !isVoting
                     ? 'bg-green-600 hover:bg-green-700 text-white'
