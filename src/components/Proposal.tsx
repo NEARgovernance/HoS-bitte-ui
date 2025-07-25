@@ -49,6 +49,13 @@ interface ProposalProps {
   data: ProposalData;
 }
 
+function parseNearAmount(amountStr: string) {
+  if (!amountStr || isNaN(Number(amountStr))) return null;
+  const [wholePart, fracPart = ""] = amountStr.split(".");
+  const paddedFrac = (fracPart + "0".repeat(24)).slice(0, 24);
+  return BigInt(wholePart + paddedFrac).toString();
+}
+
 const Proposal: React.FC<ProposalProps> = ({ data }) => {
   const { proposal } = data;
   const { selector, activeAccountId } = useBitteWallet();
@@ -139,14 +146,15 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
             type: "FunctionCall",
             params: {
               methodName: "vote",
+              
               args: {
-                proposal_id: proposal.id.toString(),
-                vote: votingOption.toString(),
+                proposal_id: proposal.id,
+                vote: votingOption,
                 merkle_proof: proofData[0],
                 v_account: proofData[1]
               },
               gas: "300000000000000",
-              deposit: "0"
+              deposit: parseNearAmount("0.00125") || "0"
             }
           }
         ]
