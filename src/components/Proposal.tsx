@@ -142,8 +142,8 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
               args: {
                 proposal_id: proposal.id.toString(),
                 vote: votingOption.toString(),
-                merkleProof: proofData[0],
-                vAccount: proofData[1]
+                merkle_proof: proofData[0],
+                v_account: proofData[1]
               },
               gas: "300000000000000",
               deposit: "0"
