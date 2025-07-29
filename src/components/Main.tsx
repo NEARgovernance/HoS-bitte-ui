@@ -4,6 +4,7 @@ import { BitteAiChat  } from "@bitte-ai/chat";
 import { useBitteWallet, Wallet   } from "@bitte-ai/react";
 import { useEffect, useState } from "react";
 import Proposal from "./Proposal";
+import ProposalList from "./ProposalList";
 
 const bitteAgent = {
   id: "bitte-assistant",
@@ -33,6 +34,28 @@ const Main: React.FC = () => {
         <Proposal data={props.data} />
       ),
     },
+    {
+      name: 'getRecentProposals', // This should match the operationId or route name from your OpenAPI spec
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      component: (props: any) => (
+        <ProposalList data={props.data} />
+      ),
+    },
+    {
+      name: 'getRecentActiveProposals', // This should match the operationId or route name from your OpenAPI spec
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      component: (props: any) => (
+        <ProposalList data={props.data} />
+      ),
+    },
+    {
+      name: 'searchProposal', // This should match the operationId or route name from your OpenAPI spec
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      component: (props: any) => (
+        <ProposalList data={props.data} />
+      ),
+    },
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ] as any;
   return (

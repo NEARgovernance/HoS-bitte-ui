@@ -100,7 +100,6 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
 
 
     setIsVoting(true);
-    console.log("Voting option:", votingOption);
     try {
       const wallet = await selector.wallet();
       
