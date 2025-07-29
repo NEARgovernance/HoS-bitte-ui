@@ -25,7 +25,7 @@ const CreateProposal: React.FC<CreateProposalProps> = ({ onSubmit }) => {
   const [link, setLink] = useState("");
   const [votingOptions, setVotingOptions] = useState<string[]>(["", ""]);
   const [submitting, setSubmitting] = useState(false);
-  const { selector, activeAccountId } = useBitteWallet();
+  const { selector } = useBitteWallet();
 
   const handleOptionChange = (idx: number, value: string) => {
     const updated = [...votingOptions];
@@ -48,7 +48,7 @@ const CreateProposal: React.FC<CreateProposalProps> = ({ onSubmit }) => {
       const VOTING_CONTRACT = process.env.VOTING_CONTRACT || "example.ballotbox.testnet";
       const gasResult = "300000000000000"; // 300 Tgas
       const filteredVotingOptions = proposal.voting_options.filter((opt) => opt.trim() !== "");
-      const result = await wallet.signAndSendTransaction({
+      await wallet.signAndSendTransaction({
         receiverId: VOTING_CONTRACT,
         actions: [
           {

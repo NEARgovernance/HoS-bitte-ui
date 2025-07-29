@@ -58,12 +58,10 @@ const Main: React.FC = () => {
     },
     {
       name: 'createProposalUI', // This should match the operationId or route name from your OpenAPI spec
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      component: (props: any) => (
+      component: () => (
         <CreateProposal />
       ),
     },
-    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ] as any;
   return (
