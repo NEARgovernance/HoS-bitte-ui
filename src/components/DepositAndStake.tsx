@@ -113,7 +113,7 @@ const DepositAndStake: React.FC<DepositAndStakeProps> = ({ onSubmit }) => {
         <ul className="text-blue-100 text-xs space-y-1">
           <li>• NEAR will be deposited to the vNEAR contract</li>
           <li>• Funds will be automatically staked with the selected validator</li>
-          <li>• You'll receive vNEAR tokens representing your stake</li>
+          <li>• You&apos;ll receive vNEAR tokens representing your stake</li>
           <li>• Staking rewards will be automatically compounded</li>
         </ul>
       </div>
