@@ -1,5 +1,6 @@
 import React from "react";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface ProposalListProps {
   data: any; // Accepts array or object with proposals
 }
@@ -18,6 +19,7 @@ const ProposalList: React.FC<ProposalListProps> = ({ data }) => {
 
   return (
     <div className="space-y-6">
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       {proposals.map((proposal: any) => (
         <div
           key={proposal.id}
