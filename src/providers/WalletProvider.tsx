@@ -8,7 +8,7 @@ type WalletProviderProps = {
 
 const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   return (
-    <BitteWalletContextProvider network="testnet">
+    <BitteWalletContextProvider network="testnet" >
       {children}
     </BitteWalletContextProvider>
   );
