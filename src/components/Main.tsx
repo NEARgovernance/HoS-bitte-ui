@@ -5,7 +5,8 @@ import { useBitteWallet, Wallet   } from "@bitte-ai/react";
 import { useEffect, useState } from "react";
 import Proposal from "./Proposal";
 import ProposalList from "./ProposalList";
-import CreateProposal from "./CreateProposal"
+import CreateProposal from "./CreateProposal";
+import AccountState from "./AccountState";
 
 const bitteAgent = {
   id: "bitte-assistant",
@@ -60,6 +61,13 @@ const Main: React.FC = () => {
       name: 'createProposalUI', // This should match the operationId or route name from your OpenAPI spec
       component: () => (
         <CreateProposal />
+      ),
+    },
+    {
+      name: 'getAccountState', // This should match the operationId or route name from your OpenAPI spec
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      component: (props: any) => (
+        <AccountState data={props.data} />
       ),
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
