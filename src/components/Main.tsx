@@ -7,7 +7,6 @@ import Proposal from "./Proposal";
 import ProposalList from "./ProposalList";
 import CreateProposal from "./CreateProposal";
 import AccountState from "./AccountState";
-import DepositAndStake from "./DepositAndStake";
 
 const bitteAgent = {
   id: "bitte-assistant",
@@ -69,12 +68,6 @@ const Main: React.FC = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       component: (props: any) => (
         <AccountState data={props.data} />
-      ),
-    },
-    {
-      name: 'depositAndStake', // This should match the operationId or route name from your OpenAPI spec
-      component: () => (
-        <DepositAndStake />
       ),
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

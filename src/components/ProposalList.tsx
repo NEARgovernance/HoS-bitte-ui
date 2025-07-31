@@ -48,6 +48,28 @@ const ProposalList: React.FC<ProposalListProps> = ({ data }) => {
     return deadline.toLocaleDateString();
   };
 
+  const getVotingProgress = (proposal: any) => {
+    if (!proposal.voting_start_time_ns || !proposal.voting_duration_ns || proposal.status !== 'Voting') {
+      return 0;
+    }
+    const startTime = parseInt(proposal.voting_start_time_ns) / 1000000;
+    const duration = parseInt(proposal.voting_duration_ns) / 1000000;
+    const endTime = startTime + duration;
+    const now = Date.now();
+    
+    if (now < startTime) return 0;
+    if (now > endTime) return 100;
+    
+    return Math.min(100, Math.max(0, ((now - startTime) / duration) * 100));
+  };
+
+  const getProgressColor = (progress: number) => {
+    if (progress >= 80) return "bg-red-500";
+    if (progress >= 60) return "bg-yellow-500";
+    if (progress >= 40) return "bg-blue-500";
+    return "bg-green-500";
+  };
+
   return (
     <div className="space-y-6">
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
@@ -97,6 +119,25 @@ const ProposalList: React.FC<ProposalListProps> = ({ data }) => {
                 </span>
               </div>
             </div>
+            
+            {/* Voting Progress Bar */}
+            {proposal.status === 'Voting' && (
+              <div className="mb-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-gray-400">Voting Progress</span>
+                  <span className="text-sm font-medium text-blue-400">
+                    {getVotingProgress(proposal).toFixed(1)}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-3">
+                  <div 
+                    className={`h-3 rounded-full transition-all duration-300 ${getProgressColor(getVotingProgress(proposal))}`}
+                    style={{ width: `${getVotingProgress(proposal)}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
+            
             <p className="text-gray-300 mb-2">{proposal.description}</p>
             
             {/* Snapshot Information */}

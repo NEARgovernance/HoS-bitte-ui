@@ -91,6 +91,28 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
     }
   };
 
+  const getVotingProgress = () => {
+    if (!proposal.voting_start_time_ns || !proposal.voting_duration_ns || proposal.status !== 'Voting') {
+      return 0;
+    }
+    const startTime = parseInt(proposal.voting_start_time_ns) / 1000000;
+    const duration = parseInt(proposal.voting_duration_ns) / 1000000;
+    const endTime = startTime + duration;
+    const now = Date.now();
+    
+    if (now < startTime) return 0;
+    if (now > endTime) return 100;
+    
+    return Math.min(100, Math.max(0, ((now - startTime) / duration) * 100));
+  };
+
+  const getProgressColor = (progress: number) => {
+    if (progress >= 80) return "bg-red-500";
+    if (progress >= 60) return "bg-yellow-500";
+    if (progress >= 40) return "bg-blue-500";
+    return "bg-green-500";
+  };
+
   const handleVote = async () => {
     
     if (votingOption === null || !activeAccountId) {
@@ -189,6 +211,25 @@ const Proposal: React.FC<ProposalProps> = ({ data }) => {
         <div>
           <h4 className="text-lg font-medium mb-2">{proposal.title}</h4>
           <p className="text-gray-300 mb-2">{proposal.description}</p>
+          
+          {/* Voting Progress Bar */}
+          {proposal.status === 'Voting' && (
+            <div className="mb-4">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm text-gray-400">Voting Progress</span>
+                <span className="text-sm font-medium text-blue-400">
+                  {getVotingProgress().toFixed(1)}%
+                </span>
+              </div>
+              <div className="w-full bg-gray-700 rounded-full h-3">
+                <div 
+                  className={`h-3 rounded-full transition-all duration-300 ${getProgressColor(getVotingProgress())}`}
+                  style={{ width: `${getVotingProgress()}%` }}
+                ></div>
+              </div>
+            </div>
+          )}
+          
           {proposal.link && (
             <a 
               href={proposal.link} 
