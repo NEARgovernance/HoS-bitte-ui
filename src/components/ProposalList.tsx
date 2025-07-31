@@ -48,6 +48,7 @@ const ProposalList: React.FC<ProposalListProps> = ({ data }) => {
     return deadline.toLocaleDateString();
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getVotingProgress = (proposal: any) => {
     if (!proposal.voting_start_time_ns || !proposal.voting_duration_ns || proposal.status !== 'Voting') {
       return 0;
