@@ -19,5 +19,12 @@ export const GET = async (req: NextRequest): Promise<NextResponse> => {
 
   const result = await response.json();
 
-  return NextResponse.json(result);
+  const nextResponse = NextResponse.json(result);
+  
+  // Add CORS headers
+  nextResponse.headers.set('Access-Control-Allow-Origin', '*');
+  nextResponse.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  nextResponse.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  return nextResponse;
 };

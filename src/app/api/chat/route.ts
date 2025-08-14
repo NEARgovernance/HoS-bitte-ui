@@ -26,6 +26,11 @@ export const POST = async (req: NextRequest): Promise<Response> => {
 
     const headers = new Headers(upstreamResponse.headers);
     headers.delete('Content-Encoding');
+    
+    // Add CORS headers
+    headers.set('Access-Control-Allow-Origin', '*');
+    headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     return new Response(upstreamResponse.body, {
       status: upstreamResponse.status,
@@ -33,11 +38,16 @@ export const POST = async (req: NextRequest): Promise<Response> => {
     });
   } catch (error) {
     console.error('Error in chat API route:', error);
+    
+    const headers = new Headers();
+    headers.set('Content-Type', 'application/json');
+    headers.set('Access-Control-Allow-Origin', '*');
+    headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
       status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
     });
   }
 };
